@@ -1,0 +1,12 @@
+version: '2.1'
+
+services:
+  app:
+    image: suy/flowy-server-dev
+    build: .
+    depends_on:
+      - redis
+    ports:
+      - 8000:8000
+  redis:
+    image: redis:alpine
