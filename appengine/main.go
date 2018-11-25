@@ -85,6 +85,13 @@ func set(ctx context.Context, res http.ResponseWriter, req *http.Request) {
 	}
 
 	key := datastore.NewKey(ctx, "Task", task.ID, 0, nil)
+
+	if err := datastore.Get(ctx, key, &task); err != nil {
+		if err := datastore.Delete(ctx, key); err != nil {
+			log.Errorf(ctx, "Could not remove from datastore, error: %v", err)
+		}
+	}
+
 	if _, err := datastore.Put(ctx, key, &task); err != nil {
 		log.Errorf(ctx, "Could not add to datastore, error: %v", err)
 		res.WriteHeader(http.StatusInternalServerError)
